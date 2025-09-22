@@ -3,7 +3,8 @@
     "title": "SaaS Boilerplate",
     "subtitle": "Modern SaaS application with Next.js and FastAPI",
     "deployButton": "Deploy now",
-    "docsButton": "Read our docs"
+    "docsButton": "Read our docs",
+    "loginButton": "Login"
   },
   "Navigation": {
     "home": "Home",

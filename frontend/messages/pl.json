@@ -3,7 +3,8 @@
     "title": "Szablon SaaS",
     "subtitle": "Nowoczesna aplikacja SaaS z Next.js i FastAPI",
     "deployButton": "Wdróż teraz",
-    "docsButton": "Przeczytaj dokumentację"
+    "docsButton": "Przeczytaj dokumentację",
+    "loginButton": "Zaloguj się"
   },
   "Navigation": {
     "home": "Strona główna",
