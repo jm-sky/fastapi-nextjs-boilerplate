@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {useTranslations} from 'next-intl';
+import { HealthStatus } from "@/components/HealthStatus";
+import { useTranslations } from 'next-intl';
 
 export default function Home() {
   const t = useTranslations('HomePage');
@@ -20,6 +21,8 @@ export default function Home() {
           height={38}
           priority
         />
+
+        <HealthStatus />
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <Button asChild>

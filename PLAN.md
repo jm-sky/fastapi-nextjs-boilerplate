@@ -58,9 +58,18 @@
 - ✅ Page.tsx używa useTranslations('HomePage')
 - ✅ Type-check: OK, Build: OK (2.7s, JS size: 131kB)
 
-### 6. TanStack Query
-**Status**: PENDING
-**Cel**: Instalacja + przykładowe zapytanie do backend
+### 6. ✅ TanStack Query
+**Status**: COMPLETED
+**Polecenia**: `pnpm add @tanstack/react-query`
+**Wynik**:
+- ✅ TanStack Query 5.90.1 zainstalowany
+- ✅ QueryProvider w providers.tsx z client component
+- ✅ Layout.tsx zaktualizowany z QueryProvider
+- ✅ useHealthCheck hook dla komunikacji z backend
+- ✅ HealthStatus component z real-time API status
+- ✅ Komunikacja działa: backend otrzymuje zapytania /health
+- ✅ Next.js proxy: `/api/*` → `http://127.0.0.1:8000/*` + CORS dla production
+- ✅ Type-check i build przechodzą (2.6s, 147kB first load)
 
 ### 7. ✅ Backend FastAPI
 **Status**: COMPLETED

@@ -7,10 +7,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS for frontend development
+# Configure CORS - useful for production and other environments
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js dev server
+    allow_origins=[
+        "http://localhost:3000",  # Next.js dev server
+        "https://yourdomain.com",  # Production frontend (update as needed)
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
