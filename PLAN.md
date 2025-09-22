@@ -37,21 +37,47 @@
 - ✅ Dev server działa: `pnpm dev` (1095ms startup)
 - ✅ Build działa: `pnpm build` (2.2s, linting + types OK)
 
-### 4. Setup shadcn/ui
-**Status**: PENDING
-**Cel**: `npx shadcn@latest init` + przykład komponentu
+### 4. ✅ Setup shadcn/ui
+**Status**: COMPLETED
+**Polecenia**: `npx shadcn@latest init`, `npx shadcn@latest add button`
+**Wynik**:
+- ✅ shadcn/ui skonfigurowany z Tailwind v4
+- ✅ Dodano Button component z Radix UI
+- ✅ Utilities: `class-variance-authority`, `clsx`, `tailwind-merge`
+- ✅ Przykład użycia w page.tsx z wariantami `default` i `outline`
+- ✅ Type-check: OK, Build: OK (2.2s)
 
-### 5. Konfiguracja i18n (EN/PL)
-**Status**: PENDING
-**Cel**: App Router i18n z next-intl
+### 5. ✅ Konfiguracja i18n (EN/PL)
+**Status**: COMPLETED
+**Polecenia**: `pnpm add next-intl`, konfiguracja plików
+**Wynik**:
+- ✅ next-intl 4.3.9 zainstalowany (po sprawdzeniu web docs!)
+- ✅ Konfiguracja: messages/en.json, messages/pl.json
+- ✅ i18n/request.ts + next.config.ts plugin
+- ✅ Layout.tsx z NextIntlClientProvider
+- ✅ Page.tsx używa useTranslations('HomePage')
+- ✅ Type-check: OK, Build: OK (2.7s, JS size: 131kB)
 
 ### 6. TanStack Query
 **Status**: PENDING
 **Cel**: Instalacja + przykładowe zapytanie do backend
 
-### 7. Backend FastAPI
-**Status**: PENDING
-**Cel**: `.venv` + `fastapi[standard]` + `/health` endpoint
+### 7. ✅ Backend FastAPI
+**Status**: COMPLETED
+**Polecenia**: `python3 -m venv .venv`, `pip install "fastapi[standard]" uvicorn pytest ruff mypy`
+**Wynik**:
+- ✅ Virtual environment w backend/.venv
+- ✅ FastAPI 0.117.1 + standard dependencies zainstalowane
+- ✅ main.py z CORS dla localhost:3000
+- ✅ Endpoints: `/` i `/health`
+- ✅ requirements.txt z pinned versions
+- ✅ Server działa: http://127.0.0.1:8000
+- ✅ Docs: http://127.0.0.1:8000/docs
+
+**WAŻNE**: Backend powinien:
+- Odpowiadać camelCase responses
+- Oczekiwać i walidować camelCase payload w requests
+- Używać factory pattern do tworzenia aplikacji
 
 ### 8. Dev setup test
 **Status**: PENDING
@@ -72,6 +98,8 @@
 **Status**: PENDING
 
 ## Uwagi
+- **WAŻNE**: Przed KAŻDYM krokiem - sprawdzaj oficjalną dokumentację w web!
 - Zachowuję istniejące pliki (mogą być przydatne)
 - Używam Playwright MCP do testów E2E
 - Pinned dependencies dla stabilności
+- WebFetch używamy do weryfikacji aktualnych praktyk 2025
