@@ -1,0 +1,17 @@
+[flake8]
+max-line-length = 120
+max-complexity = 10
+extend-ignore = E203
+exclude =
+  .venv,
+  .git,
+  __pycache__,
+  migrations,
+  node_modules,
+  frontend,
+  .mypy_cache,
+  dist,
+  build
+per-file-ignores =
+  __init__.py:F401
+  tests/*:S101
