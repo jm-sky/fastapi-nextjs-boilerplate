@@ -79,9 +79,13 @@
 - Oczekiwać i walidować camelCase payload w requests
 - Używać factory pattern do tworzenia aplikacji
 
-### 8. Dev setup test
-**Status**: PENDING
-**Cel**: Frontend + backend równocześnie
+### 8. ✅ Dev setup test
+**Status**: COMPLETED
+**Wynik**:
+- ✅ Frontend: http://localhost:3000 (1044ms startup)
+- ✅ Backend: http://127.0.0.1:8000 (FastAPI docs na /docs)
+- ✅ Health check: `{"status":"healthy","message":"API is running"}`
+- ✅ CORS skonfigurowany dla komunikacji między serwerami
 
 ### 9. Linting/typecheck/testing
 **Status**: PENDING
