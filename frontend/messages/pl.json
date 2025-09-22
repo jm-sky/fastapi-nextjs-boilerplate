@@ -1,0 +1,13 @@
+{
+  "HomePage": {
+    "title": "Szablon SaaS",
+    "subtitle": "Nowoczesna aplikacja SaaS z Next.js i FastAPI",
+    "deployButton": "Wdróż teraz",
+    "docsButton": "Przeczytaj dokumentację"
+  },
+  "Navigation": {
+    "home": "Strona główna",
+    "about": "O nas",
+    "contact": "Kontakt"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "HomePage": {
+    "title": "SaaS Boilerplate",
+    "subtitle": "Modern SaaS application with Next.js and FastAPI",
+    "deployButton": "Deploy now",
+    "docsButton": "Read our docs"
+  },
+  "Navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  }
+}
