@@ -55,43 +55,53 @@ cp backend/.env.example backend/.env
 
 ### Development
 
-Start both servers concurrently:
+All commands run from the project root for consistency and ease of use.
 
-**Frontend (port 3000):**
+**Start both servers concurrently:**
 ```bash
-cd frontend
 pnpm dev
 ```
 
-**Backend (port 8000):**
+**Or start individually:**
 ```bash
-cd backend
-source .venv/bin/activate
-fastapi dev main.py
+pnpm dev:frontend    # Frontend only (port 3000)
+pnpm dev:backend     # Backend only (port 8000)
 ```
 
 The frontend proxy configuration automatically routes `/api/*` requests to the backend.
 
 ### Available Commands
 
-#### Frontend
+All commands should be run from the project root directory:
+
+#### Development
 ```bash
-cd frontend
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm lint         # Run ESLint
-pnpm type-check   # Run TypeScript type checking
+pnpm dev                 # Start both frontend and backend
+pnpm dev:frontend        # Start frontend dev server only
+pnpm dev:backend         # Start backend dev server only
 ```
 
-#### Backend
+#### Building & Production
 ```bash
-cd backend
-source .venv/bin/activate
-fastapi dev main.py   # Start development server
-ruff check .         # Run linter
-mypy .              # Run type checker
-pytest              # Run tests (when implemented)
+pnpm build               # Build frontend for production
+pnpm --filter frontend start  # Start production frontend server
+```
+
+#### Code Quality
+```bash
+# Frontend
+pnpm lint                # Run ESLint on frontend
+pnpm type-check          # Run TypeScript type checking
+
+# Backend
+pnpm lint:backend        # Run ruff linter on backend
+pnpm type-check:backend  # Run mypy type checking on backend
+```
+
+#### Testing
+```bash
+pnpm test                # Run Playwright E2E tests
+pnpm test:backend        # Run backend pytest (when implemented)
 ```
 
 ## Project Structure
@@ -122,6 +132,8 @@ pytest              # Run tests (when implemented)
 - ✅ Environment-based configuration
 - ✅ Development proxy setup
 - ✅ Linting and type checking
+- ✅ Playwright E2E testing setup
+- ✅ Workspace scripts for easy development
 - 🚧 Authentication (JWT + OAuth)
 - 🚧 Database integration
 - 🚧 Testing setup
