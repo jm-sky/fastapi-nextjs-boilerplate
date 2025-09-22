@@ -12,6 +12,7 @@ lerna-debug.log*
 
 # Backend
 .mypy_cache
+.ruff_cache
 *.swp
 *.pem
 *.pyc
