@@ -1,4 +1,4 @@
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     # Server
     host: str = Field(default="127.0.0.1", description="Server host")
     port: int = Field(default=8000, description="Server port")
+    environment: str = Field(default="development", description="Environment (development, production)")
 
     # CORS
     cors_origins: list[str] = Field(
@@ -29,6 +30,42 @@ class Settings(BaseSettings):
         default="your-secret-key-change-this-in-production",
         description="Secret key for JWT and other crypto operations"
     )
+
+    # JWT Configuration
+    jwt_algorithm: str = Field(default="HS256", description="JWT signing algorithm")
+    access_token_expires_minutes: int = Field(default=30, description="Access token expiration in minutes")
+    refresh_token_expires_days: int = Field(default=7, description="Refresh token expiration in days")
+
+    # Rate Limiting Configuration
+    rate_limit_default_per_day: int = Field(default=1000, description="Default rate limit per day")
+    rate_limit_default_per_hour: int = Field(default=100, description="Default rate limit per hour")
+    auth_register_rate_limit: str = Field(default="5/minute", description="Registration rate limit")
+    auth_login_rate_limit: str = Field(default="10/minute", description="Login rate limit")
+    auth_refresh_rate_limit: str = Field(default="20/minute", description="Token refresh rate limit")
+
+    @field_validator('secret_key')
+    def validate_secret_key(cls, v: str) -> str:
+        """Validate secret key strength and security."""
+        if v == "your-secret-key-change-this-in-production":
+            raise ValueError(
+                "Secret key must be changed from default value in production. "
+                "Set SECRET_KEY environment variable with a secure random string."
+            )
+
+        if len(v) < 32:
+            raise ValueError(
+                "Secret key must be at least 32 characters long for security. "
+                "Use a cryptographically secure random string."
+            )
+
+        # Check for basic entropy (not all same character)
+        if len(set(v)) < 8:
+            raise ValueError(
+                "Secret key must have sufficient entropy. "
+                "Use a truly random string with varied characters."
+            )
+
+        return v
 
     # Database (for future use)
     database_url: str = Field(

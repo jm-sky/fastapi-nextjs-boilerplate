@@ -96,18 +96,81 @@
 - ✅ Health check: `{"status":"healthy","message":"API is running"}`
 - ✅ CORS skonfigurowany dla komunikacji między serwerami
 
-### 9. Linting/typecheck/testing
-**Status**: PENDING
-**Cel**: ESLint, TypeScript, ruff, mypy, **Playwright MCP**
+### 9. ✅ Factory pattern + Settings refactor
+**Status**: COMPLETED
+**Wynik**:
+- ✅ Backend refactored do factory pattern w `app/core/factory.py`
+- ✅ Settings z pydantic-settings w `app/core/settings.py`
+- ✅ .env.example template z konfiguracją
+- ✅ Health router w `app/api/health.py`
+- ✅ main.py uproszczony do `app = create_app(settings)`
 
-### 10. Build verification
+### 10. ✅ Linting/typecheck/testing
+**Status**: COMPLETED
+**Wynik**:
+- ✅ Frontend: ESLint i TypeScript type-check działają
+- ✅ Backend: ruff i mypy działają (all checks passed)
+- ✅ Playwright 1.55.0 zainstalowany z konfiguracją
+- ✅ Example tests: basic navigation + API proxy test
+- ✅ Workspace scripts w root package.json z concurrently
+
+### 11. ✅ Build verification
+**Status**: COMPLETED
+**Wynik**:
+- ✅ Frontend build: Next.js compiles successfully (3.5s, 145kB first load)
+- ✅ Backend verification: API endpoints respond correctly
+- ✅ Proxy works: `/api/health` → backend health endpoint
+- ✅ Comprehensive README.md z commands i project structure
+
+### 12. ✅ JWT authentication endpoints
+**Status**: COMPLETED
+**Wynik**:
+- ✅ Register endpoint z JWT tokens (/auth/register)
+- ✅ Login endpoint z authentication (/auth/login)  
+- ✅ Token refresh endpoint (/auth/refresh)
+- ✅ Logout endpoint (/auth/logout)
+- ✅ Current user info endpoint (/auth/me)
+- ✅ Custom exception classes for better error handling
+- ✅ Rate limiting na auth endpoints (slowapi)
+- ✅ Secret key validation w settings
+- ✅ Bcrypt password hashing
+- ✅ JWT access + refresh tokens z proper expiration
+
+### 13. Login functionality (backend + frontend)
+**Status**: PENDING
+**Cel**: Frontend login form + backend integration
+
+### 14. Password change functionality
 **Status**: PENDING
 
-### 11-16. Auth features
+### 15. Password strength validation
 **Status**: PENDING
-**Cel**: JWT, login, password change, reCAPTCHA, OAuth
+**Cel**: Implement strong password requirements
+**TODO**:
+- ✅ Minimum 8 characters (already implemented)
+- ⏳ Require uppercase, lowercase, digit, special character
+- ⏳ ~~Password strength meter in frontend~~ `LATER`
+- ⏳ ~~Common password dictionary check~~ `LATER`
+- ⏳ ~~Password history to prevent reuse~~ `LATER`
 
-### 17. CI workflow
+### 16. Token blacklisting for proper logout
+**Status**: PENDING  
+**Cel**: Implement secure token invalidation
+**TODO**:
+- ⏳ In-memory token blacklist for development
+- ⏳ Redis-based blacklist for production
+- ⏳ Cleanup expired tokens from blacklist
+- ⏳ Check blacklist in token verification
+- ⏳ Add token to blacklist on logout
+- ⏳ Add all user tokens to blacklist on password change
+
+### 17. Google reCAPTCHA integration
+**Status**: PENDING
+
+### 18. OAuth Google authentication
+**Status**: PENDING
+
+### 19. CI workflow
 **Status**: PENDING
 
 ## Uwagi
