@@ -8,14 +8,14 @@
   "scripts": {
     "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
     "dev:frontend": "pnpm --filter frontend dev",
-    "dev:backend": "cd backend && source .venv/bin/activate && fastapi dev main.py",
+    "dev:backend": "cd backend && . .venv/bin/activate && fastapi dev main.py",
     "build": "pnpm --filter frontend build",
     "lint": "pnpm --filter frontend lint",
-    "lint:backend": "cd backend && source .venv/bin/activate && ruff check .",
+    "lint:backend": "cd backend && . .venv/bin/activate && ruff check .",
     "type-check": "pnpm --filter frontend type-check",
-    "type-check:backend": "cd backend && source .venv/bin/activate && mypy .",
+    "type-check:backend": "cd backend && . .venv/bin/activate && mypy .",
     "test": "pnpm --filter frontend test",
-    "test:backend": "cd backend && source .venv/bin/activate && pytest"
+    "test:backend": "cd backend && . .venv/bin/activate && pytest"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

@@ -1,6 +1,13 @@
 // Login page
 
+import type { Metadata } from 'next';
 import { LoginForm } from '@/components/auth/login-form';
+import { getPageTitle, getPageDescription } from '@/lib/app.config';
+
+export const metadata: Metadata = {
+  title: getPageTitle('Sign In'),
+  description: getPageDescription('Sign in to your account to access your dashboard and manage your settings.'),
+};
 
 export default function LoginPage() {
   return (

@@ -3,15 +3,19 @@ import { test, expect } from '@playwright/test';
 test('has title', async ({ page }) => {
   await page.goto('/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Next.js/);
+  // Expect a title to contain our app name
+  await expect(page).toHaveTitle(/SaaS Boilerplate/);
 });
 
 test('can navigate to home page', async ({ page }) => {
   await page.goto('/');
 
-  // Expect page to have a heading containing "Hello".
-  await expect(page.getByRole('heading', { name: /hello/i })).toBeVisible();
+  // Expect page to have a heading with our app name
+  await expect(page.getByRole('heading', { name: /SaaS Boilerplate/i })).toBeVisible();
+
+  // Check for other expected elements
+  await expect(page.getByText(/Modern SaaS application/i)).toBeVisible();
+  await expect(page.getByRole('button', { name: /login/i })).toBeVisible();
 });
 
 test('health check works via API proxy', async ({ page }) => {
