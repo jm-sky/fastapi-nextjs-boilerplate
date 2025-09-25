@@ -1,5 +1,5 @@
 {
-  "name": "saas-fastapi-react-boilerplate",
+  "name": "fastapi-nextjs-boilerplate",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
