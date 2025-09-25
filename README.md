@@ -2,6 +2,9 @@
 
 Modern SaaS application boilerplate built with Next.js and FastAPI.
 
+<img width="1247" height="721" alt="obraz" src="https://github.com/user-attachments/assets/a53cb3cf-0f56-4292-bd7b-a1c9ce5f3bf1" />
+
+
 ## Tech Stack
 
 ### Frontend
