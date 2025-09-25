@@ -1,6 +1,6 @@
 'use client';
 
-// Login form component with validation and loading states
+// Register form component with validation and loading states
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,29 +12,41 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth.context';
 import { getErrorMessage } from '@/lib/error.guards';
-import { LoginSchema, type LoginFormData } from '@/lib/validations';
+import { RegisterSchema, type RegisterFormData } from '@/lib/validations';
 import { AUTH_CONFIG } from '@/lib/auth.config';
 import Link from 'next/link';
 
-export function LoginForm() {
+export function RegisterForm() {
   const router = useRouter();
-  const { login, isLoading } = useAuth();
+  const { register: registerUser, isLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(LoginSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(RegisterSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     setError(null);
+    setSuccess(null);
 
     try {
-      await login(data);
-      router.push(AUTH_CONFIG.loginRedirect); // Configurable redirect after successful login
+      await registerUser(data);
+
+      // Check if registration auto-logs the user in or not
+      // If it auto-logs in, redirect to dashboard
+      // If not, redirect to login with success message
+      setSuccess('Registration successful! Redirecting...');
+
+      // Give user time to see success message
+      setTimeout(() => {
+        router.push(AUTH_CONFIG.loginRedirect); // Default to dashboard
+      }, 1500);
+
     } catch (error: unknown) {
       // Use type-safe error handling
       const errorMessage = getErrorMessage(error);
@@ -48,9 +60,9 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>Sign Up</CardTitle>
         <CardDescription>
-          Enter your email and password to access your account
+          Create a new account to get started
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -60,6 +72,26 @@ export function LoginForm() {
               {error}
             </div>
           )}
+
+          {success && (
+            <div className="p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md">
+              {success}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="John Doe"
+              disabled={isFormLoading}
+              {...register('name')}
+            />
+            {errors.name && (
+              <p className="text-sm text-red-600">{errors.name.message}</p>
+            )}
+          </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -87,21 +119,24 @@ export function LoginForm() {
             {errors.password && (
               <p className="text-sm text-red-600">{errors.password.message}</p>
             )}
+            <p className="text-xs text-gray-500">
+              Password must contain at least 8 characters with uppercase, lowercase, and number
+            </p>
           </div>
 
           <Button type="submit" className="w-full" disabled={isFormLoading}>
-            {isLoading ? 'Authenticating...' : isSubmitting ? 'Signing in...' : 'Sign In'}
+            {isLoading ? 'Creating account...' : isSubmitting ? 'Creating account...' : 'Create Account'}
           </Button>
 
           <div className="text-center text-sm text-gray-600">
-            Don&apos;t have an account?{' '}
+            Already have an account?{' '}
             <Button
               variant="link"
               className="p-0 h-auto"
               disabled={isFormLoading}
               asChild
             >
-              <Link href="/register">Sign up</Link>
+              <Link href="/login">Sign in</Link>
             </Button>
           </div>
         </form>

@@ -1,45 +1,23 @@
-'use client';
+import type { Metadata } from 'next';
+import { getPageTitle, getPageDescription } from '@/lib/app.config';
+import { Navigation, HeroSection, StatusSection, Footer } from '@/components/landing';
 
-import { Button } from "@/components/ui/button";
-import { HealthStatus } from "@/components/HealthStatus";
-import { useTranslations } from 'next-intl';
-import { useRouter } from "next/navigation";
+export const metadata: Metadata = {
+  title: getPageTitle('Home'),
+  description: getPageDescription('Modern SaaS application built with FastAPI and Next.js.'),
+};
 
 export default function Home() {
-  const t = useTranslations('HomePage');
-  const router = useRouter();
-
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <div className="text-center sm:text-left">
-          <h1 className="text-4xl font-bold mb-2">{t('title')}</h1>
-          <p className="text-lg text-muted-foreground">{t('subtitle')}</p>
-        </div>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-sky-100 via-sky-50 to-blue-100">
+      <Navigation />
 
-        <HealthStatus />
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <Button
-            type="button"
-            variant="default"
-            className="px-8"
-            onClick={() => router.push('/login')}
-          >
-            {t('loginButton')}
-          </Button>
-        </div>
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <HeroSection />
+        <StatusSection />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 text-xs hover:underline hover:underline-offset-4"
-          href="https://dev-made.it"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          &copy; 2025 DEV Made IT
-        </a>
-      </footer>
+
+      <Footer />
     </div>
   );
 }

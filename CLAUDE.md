@@ -103,6 +103,14 @@ The backend follows a **factory pattern** with centralized configuration:
 - **Testing Config**: `frontend/playwright.config.ts` with webServer setup
 - **Workspace Config**: Root `package.json` with pnpm workspace and scripts
 
+### Color Scheme
+
+The project uses a consistent color scheme defined in `frontend/src/app/globals.css`:
+- **Primary Color**: Sky blue (`oklch(0.7 0.15 225)`) - hue 225 degrees
+- **Design Pattern**: Use primary sky blue for main branding, buttons, and navigation
+- **Hero Section**: Can mix primary sky with purple/violet accents for visual interest
+- **Gradients**: Combine sky blue with complementary colors (purple, cyan) for enhanced visual appeal
+
 ### Current API Endpoints
 
 - `GET /` - Root endpoint returning API info

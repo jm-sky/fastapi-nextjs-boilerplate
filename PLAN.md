@@ -140,10 +140,54 @@
 **Status**: PENDING
 **Cel**: Frontend login form + backend integration
 
-### 14. Password change functionality
-**Status**: PENDING
+### 13.1. Register page and form
+**Status**: ✅ COMPLETED (TDD approach)
+**Cel**: Create register page with form component
+**TODO**:
+- ✅ Create /register page route
+- ✅ Create register form component with validation
+- ✅ Integrate with backend /auth/register endpoint
+- ✅ Add form validation (name, email, password rules)
+- ✅ Add error handling and loading states
+- ✅ Add navigation to login page
+- ✅ Add comprehensive Playwright tests (register-page.spec.ts)
 
-### 15. Password strength validation
+### 13.2. Enhanced landing page with authentication state
+**Status**: ✅ COMPLETED (TDD approach)
+**Cel**: Improve landing page with proper navigation based on auth state
+**TODO**:
+- ✅ Add Register button alongside Login button
+- ✅ Check authentication state on landing page
+- ✅ Show Dashboard button for authenticated users
+- ✅ Implement auth context/hook for state management (already existed)
+- ✅ Add logout functionality
+- ✅ Add comprehensive Playwright tests (landing-page-auth-state.spec.ts)
+- ⚠️ Minor issues: loading state timing, logout redirect handling
+
+### 14. Forgot password functionality
+**Status**: PENDING
+**Cel**: Implement password reset flow
+**TODO**:
+- ⏳ Create forgot password backend endpoint (/auth/forgot-password)
+- ⏳ Create password reset token generation and validation
+- ⏳ Create /forgot-password page with email input form
+- ⏳ Create /reset-password/[token] page with new password form
+- ⏳ Add email sending functionality for reset links
+- ⏳ Add "Forgot password?" link on login page
+- ⏳ Add proper validation and error handling
+
+### 15. Password change functionality (authenticated users)
+**Status**: PENDING
+**Cel**: Allow authenticated users to change their password
+**TODO**:
+- ⏳ Create change password backend endpoint (/auth/change-password)
+- ⏳ Create /change-password page (protected route)
+- ⏳ Add form with current password + new password fields
+- ⏳ Add proper validation (current password verification)
+- ⏳ Add link to change password from dashboard/settings
+- ⏳ Invalidate all user tokens after password change
+
+### 16. Password strength validation
 **Status**: PENDING
 **Cel**: Implement strong password requirements
 **TODO**:
@@ -153,7 +197,7 @@
 - ⏳ ~~Common password dictionary check~~ `LATER`
 - ⏳ ~~Password history to prevent reuse~~ `LATER`
 
-### 16. Token blacklisting for proper logout
+### 17. Token blacklisting for proper logout
 **Status**: PENDING  
 **Cel**: Implement secure token invalidation
 **TODO**:
@@ -164,13 +208,13 @@
 - ⏳ Add token to blacklist on logout
 - ⏳ Add all user tokens to blacklist on password change
 
-### 17. Google reCAPTCHA integration
+### 18. Google reCAPTCHA integration
 **Status**: PENDING
 
-### 18. OAuth Google authentication
+### 19. OAuth Google authentication
 **Status**: PENDING
 
-### 19. CI workflow
+### 20. CI workflow
 **Status**: PENDING
 
 ## Uwagi
