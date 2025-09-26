@@ -62,6 +62,13 @@ class InvalidTokenTypeError(AuthenticationError):
         super().__init__(message, status.HTTP_401_UNAUTHORIZED)
 
 
+class InvalidResetTokenError(AuthenticationError):
+    """Raised when a password reset token is invalid or expired."""
+
+    def __init__(self, message: str = "Invalid or expired reset token"):
+        super().__init__(message, status.HTTP_400_BAD_REQUEST)
+
+
 # Global exception handlers
 async def authentication_exception_handler(request: Request, exc: AuthenticationError) -> JSONResponse:
     """Handle authentication exceptions globally."""

@@ -10,6 +10,7 @@ from app.core.exceptions import (
     InvalidTokenTypeError,
     UserNotFoundError,
     InactiveUserError,
+    InvalidResetTokenError,
 )
 from app.models.user import User, user_store
 from app.schemas.auth import (
@@ -20,6 +21,8 @@ from app.schemas.auth import (
     UserLogin,
     UserRegister,
     UserResponse,
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
 )
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -130,3 +133,39 @@ async def get_current_user_info(
 ) -> UserResponse:
     """Get current user information."""
     return UserResponse(**current_user.to_response())
+
+
+@router.post("/forgot-password", response_model=MessageResponse)
+@limiter.limit(settings.auth_register_rate_limit)  # Reuse register rate limit for security
+async def forgot_password(request: Request, forgot_request: ForgotPasswordRequest) -> MessageResponse:
+    """Request password reset token."""
+    # Generate reset token (always return success for security - don't reveal if email exists)
+    token = user_store.generate_reset_token(forgot_request.email)
+
+    if token:
+        # In production, send email with reset link containing the token
+        # For now, we'll just log it (in development only)
+        if settings.environment == "development":
+            reset_link = f"{settings.frontend_url}/reset-password/{token}"
+            print(f"Password reset link for {forgot_request.email}: {reset_link}")
+
+        # TODO: Send email with reset link
+        # await send_password_reset_email(forgot_request.email, token)
+
+    # Always return success message for security (don't reveal if email exists)
+    return MessageResponse(message="If the email exists, a password reset link has been sent")
+
+
+@router.post("/reset-password", response_model=MessageResponse)
+@limiter.limit(settings.auth_register_rate_limit)  # Reuse register rate limit for security
+async def reset_password(request: Request, reset_request: ResetPasswordRequest) -> MessageResponse:
+    """Reset password using token."""
+    success = user_store.reset_password_with_token(
+        reset_request.token,
+        reset_request.newPassword
+    )
+
+    if not success:
+        raise InvalidResetTokenError()
+
+    return MessageResponse(message="Password has been successfully reset")

@@ -106,6 +106,42 @@ class UserStore:
         """Get all users."""
         return list(self._users.values())
 
+    def update_user(self, user: User) -> User:
+        """Update user in store."""
+        self._users[user.id] = user
+        return user
+
+    def generate_reset_token(self, email: str) -> Optional[str]:
+        """Generate and store password reset token for user."""
+        user = self.get_user_by_email(email)
+        if not user or not user.isActive:
+            return None
+
+        # Generate reset token (in production, use cryptographically secure token)
+        import secrets
+        token = secrets.token_urlsafe(32)
+
+        # Token expires in 1 hour
+        from datetime import timedelta
+        expiry = datetime.now(timezone.utc) + timedelta(hours=1)
+
+        # Set reset token
+        user.set_reset_token(token, expiry)
+        self.update_user(user)
+
+        return token
+
+    def reset_password_with_token(self, token: str, new_password: str) -> bool:
+        """Reset password using token."""
+        # Find user with this token
+        for user in self._users.values():
+            if user.is_reset_token_valid(token):
+                user.set_password(new_password)
+                user.clear_reset_token()
+                self.update_user(user)
+                return True
+        return False
+
 
 # Global user store instance
 user_store = UserStore()

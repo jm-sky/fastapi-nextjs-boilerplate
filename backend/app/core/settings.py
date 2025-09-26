@@ -43,6 +43,12 @@ class Settings(BaseSettings):
     auth_login_rate_limit: str = Field(default="10/minute", description="Login rate limit")
     auth_refresh_rate_limit: str = Field(default="20/minute", description="Token refresh rate limit")
 
+    # Frontend URL Configuration
+    frontend_url: str = Field(
+        default="http://localhost:3000",
+        description="Frontend application URL for reset links and redirects"
+    )
+
     @field_validator('secret_key')
     def validate_secret_key(cls, v: str) -> str:
         """Validate secret key strength and security."""
