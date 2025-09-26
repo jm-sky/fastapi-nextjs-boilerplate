@@ -28,6 +28,7 @@ export function RegisterForm() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(RegisterSchema),
+    mode: 'onBlur', // Enable validation on blur
   });
 
   const onSubmit = async (data: RegisterFormData) => {

@@ -27,6 +27,7 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
+    mode: 'onBlur', // Enable validation on blur
   });
 
   const onSubmit = async (data: LoginFormData) => {
