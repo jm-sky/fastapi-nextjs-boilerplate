@@ -17,10 +17,36 @@ class User(BaseModel):
     hashedPassword: str
     isActive: bool = True
     createdAt: datetime
+    resetToken: Optional[str] = None
+    resetTokenExpiry: Optional[datetime] = None
 
     def verify_password(self, password: str) -> bool:
         """Verify password against stored hash."""
         return verify_password(password, self.hashedPassword)
+
+    def set_password(self, password: str) -> None:
+        """Set new password hash."""
+        self.hashedPassword = get_password_hash(password)
+
+    def set_reset_token(self, token: str, expiry: datetime) -> None:
+        """Set password reset token and expiry."""
+        self.resetToken = token
+        self.resetTokenExpiry = expiry
+
+    def clear_reset_token(self) -> None:
+        """Clear password reset token."""
+        self.resetToken = None
+        self.resetTokenExpiry = None
+
+    def is_reset_token_valid(self, token: str) -> bool:
+        """Check if reset token is valid and not expired."""
+        if not self.resetToken or not self.resetTokenExpiry:
+            return False
+        if self.resetToken != token:
+            return False
+        if datetime.now(timezone.utc) > self.resetTokenExpiry:
+            return False
+        return True
 
     def to_response(self) -> Dict[str, Any]:
         """Convert to camelCase response format."""

@@ -31,7 +31,7 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log the error
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     // Call optional error handler
     this.props.onError?.(error, errorInfo);
   }
@@ -89,7 +89,7 @@ export function AuthErrorBoundary({ children }: { children: ReactNode }) {
         console.error('Authentication error:', error, errorInfo);
       }}
       fallback={
-        <Card className="w-full max-w-md mx-auto">
+        <Card className="w-full max-w-md mx-auto mt-10">
           <CardHeader>
             <CardTitle className="text-red-600">Authentication Error</CardTitle>
             <CardDescription>

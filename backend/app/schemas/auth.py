@@ -49,3 +49,14 @@ class LoginResponse(BaseModel):
 class MessageResponse(BaseModel):
     """Generic message response."""
     message: str
+
+
+class ForgotPasswordRequest(BaseModel):
+    """Forgot password request schema."""
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    """Reset password request schema."""
+    token: str = Field(..., min_length=1)
+    newPassword: str = Field(..., min_length=8, max_length=100)

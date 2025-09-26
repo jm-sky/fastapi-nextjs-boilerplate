@@ -1,11 +1,12 @@
 // Dashboard page (protected route)
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProtectedRoute } from '@/components/auth/protected-route';
+import AuthenticatedLayout from '@/components/layout/authenticatedLayout';
 
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 p-4">
+      <AuthenticatedLayout>
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -41,7 +42,7 @@ export default function DashboardPage() {
             </Card>
           </div>
         </div>
-      </div>
+      </AuthenticatedLayout>
     </ProtectedRoute>
   );
 }
