@@ -144,13 +144,15 @@ async def forgot_password(request: Request, forgot_request: ForgotPasswordReques
 
     if token:
         # In production, send email with reset link containing the token
-        # For now, we'll just log it (in development only)
-        if settings.environment == "development":
-            reset_link = f"{settings.frontend_url}/reset-password/{token}"
-            print(f"Password reset link for {forgot_request.email}: {reset_link}")
-
         # TODO: Send email with reset link
         # await send_password_reset_email(forgot_request.email, token)
+
+        # For development only - log the reset link
+        if settings.environment == "development":
+            import logging
+            logger = logging.getLogger(__name__)
+            reset_link = f"{settings.frontend_url}/reset-password/{token}"
+            logger.info(f"Password reset link for {forgot_request.email}: {reset_link}")
 
     # Always return success message for security (don't reveal if email exists)
     return MessageResponse(message="If the email exists, a password reset link has been sent")

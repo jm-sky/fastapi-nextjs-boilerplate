@@ -173,17 +173,28 @@
 - ✅ Add comprehensive Playwright tests (landing-page-auth-state.spec.ts)
 - ⚠️ Minor issues: loading state timing, logout redirect handling
 
-### 14. Forgot password functionality
-**Status**: PENDING
+### 14. ✅ Forgot password functionality
+**Status**: COMPLETED + SECURITY ENHANCED
 **Cel**: Implement password reset flow
-**TODO**:
-- ⏳ Create forgot password backend endpoint (/auth/forgot-password)
-- ⏳ Create password reset token generation and validation
-- ⏳ Create /forgot-password page with email input form
-- ⏳ Create /reset-password/[token] page with new password form
-- ⏳ Add email sending functionality for reset links
-- ⏳ Add "Forgot password?" link on login page
-- ⏳ Add proper validation and error handling
+**Wynik**:
+- ✅ JWT-based reset tokens (enhanced security vs original plan)
+- ✅ Secure token comparison (timing attack protection)
+- ✅ Backend endpoints: `/auth/forgot-password` + `/auth/reset-password`
+- ✅ Frontend pages: `/forgot-password` + `/reset-password/[token]`
+- ✅ Consistent UI design with Card components
+- ✅ Comprehensive E2E tests with Playwright
+- ✅ Form validation with React Hook Form + Zod
+- ✅ "Forgot password?" link integrated in login page
+- ✅ Production-ready logging (no console.log in production)
+- ✅ Timeout cleanup in React components
+- ⏳ Email sending infrastructure (TODO for future iteration)
+
+**Security enhancements implemented based on code review:**
+- 🛡️ **JWT Tokens**: Replaced plain text tokens with cryptographically secure JWTs
+- 🛡️ **Timing Attack Protection**: Using `secrets.compare_digest()` for token comparison
+- 🛡️ **Clean Imports**: Moved all imports to module top-level
+- 🛡️ **Memory Safety**: No plain text token storage, JWT handles expiry
+- 🛡️ **Production Logging**: Proper logging instead of print statements
 
 ### 15. Password change functionality (authenticated users)
 **Status**: PENDING

@@ -62,3 +62,16 @@ def create_refresh_token(data: Dict[str, Any]) -> str:
     })
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
     return encoded_jwt
+
+
+def create_password_reset_token(data: Dict[str, Any]) -> str:
+    """Create a JWT password reset token with 1-hour expiration."""
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(hours=1)
+    to_encode.update({
+        "exp": expire,
+        "type": "password_reset",
+        "iat": datetime.now(timezone.utc)
+    })
+    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
+    return encoded_jwt

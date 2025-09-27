@@ -1,11 +1,12 @@
 import os
-from datetime import datetime, timezone
+import secrets
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, EmailStr
 from ulid import ULID
 
-from app.core.auth import get_password_hash, verify_password
+from app.core.auth import get_password_hash, verify_password, create_password_reset_token, verify_token
 from app.core.exceptions import UserAlreadyExistsError
 
 
@@ -39,14 +40,29 @@ class User(BaseModel):
         self.resetTokenExpiry = None
 
     def is_reset_token_valid(self, token: str) -> bool:
-        """Check if reset token is valid and not expired."""
-        if not self.resetToken or not self.resetTokenExpiry:
+        """Check if reset token is valid and not expired using secure comparison."""
+        if not self.resetToken:
             return False
-        if self.resetToken != token:
+
+        try:
+            # Verify JWT token
+            payload = verify_token(token)
+
+            # Check token type
+            if payload.get("type") != "password_reset":
+                return False
+
+            # Check if it matches stored token using secure comparison
+            if not secrets.compare_digest(self.resetToken, token):
+                return False
+
+            # Check user ID matches
+            if payload.get("sub") != self.id:
+                return False
+
+            return True
+        except Exception:
             return False
-        if datetime.now(timezone.utc) > self.resetTokenExpiry:
-            return False
-        return True
 
     def to_response(self) -> Dict[str, Any]:
         """Convert to camelCase response format."""
@@ -112,21 +128,16 @@ class UserStore:
         return user
 
     def generate_reset_token(self, email: str) -> Optional[str]:
-        """Generate and store password reset token for user."""
+        """Generate and store JWT password reset token for user."""
         user = self.get_user_by_email(email)
         if not user or not user.isActive:
             return None
 
-        # Generate reset token (in production, use cryptographically secure token)
-        import secrets
-        token = secrets.token_urlsafe(32)
+        # Generate JWT reset token
+        token = create_password_reset_token(data={"sub": user.id})
 
-        # Token expires in 1 hour
-        from datetime import timedelta
-        expiry = datetime.now(timezone.utc) + timedelta(hours=1)
-
-        # Set reset token
-        user.set_reset_token(token, expiry)
+        # Store token (no need for separate expiry as JWT handles that)
+        user.set_reset_token(token, datetime.now(timezone.utc) + timedelta(hours=1))
         self.update_user(user)
 
         return token

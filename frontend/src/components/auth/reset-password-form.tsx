@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -70,12 +70,19 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     },
     onSuccess: () => {
       setIsSuccess(true)
-      // Redirect to login after 3 seconds
-      setTimeout(() => {
-        router.push('/login')
-      }, 3000)
     },
   })
+
+  // Handle auto-redirect with cleanup
+  useEffect(() => {
+    if (isSuccess) {
+      const timeoutId = setTimeout(() => {
+        router.push('/login')
+      }, 3000)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [isSuccess, router])
 
   const onSubmit = (data: ResetPasswordFormData) => {
     resetPasswordMutation.mutate(data)
