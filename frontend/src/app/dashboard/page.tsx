@@ -1,4 +1,5 @@
 // Dashboard page (protected route)
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProtectedRoute } from '@/components/auth/protected-route';
 import AuthenticatedLayout from '@/components/layout/authenticatedLayout';
@@ -27,8 +28,16 @@ export default function DashboardPage() {
               <CardHeader>
                 <CardTitle>Settings</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-3">
                 <p className="text-gray-600">Manage your account settings</p>
+                <div className="flex flex-col space-y-2">
+                  <Link
+                    href="/change-password"
+                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    Change Password
+                  </Link>
+                </div>
               </CardContent>
             </Card>
 

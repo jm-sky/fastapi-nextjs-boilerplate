@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     auth_register_rate_limit: str = Field(default="5/minute", description="Registration rate limit")
     auth_login_rate_limit: str = Field(default="10/minute", description="Login rate limit")
     auth_refresh_rate_limit: str = Field(default="20/minute", description="Token refresh rate limit")
+    auth_password_change_rate_limit: str = Field(default="3/minute", description="Password change rate limit")
 
     # Frontend URL Configuration
     frontend_url: str = Field(

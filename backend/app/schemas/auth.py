@@ -60,3 +60,9 @@ class ResetPasswordRequest(BaseModel):
     """Reset password request schema."""
     token: str = Field(..., min_length=1)
     newPassword: str = Field(..., min_length=8, max_length=100)
+
+
+class ChangePasswordRequest(BaseModel):
+    """Change password request schema for authenticated users."""
+    currentPassword: str = Field(..., min_length=1, max_length=100)
+    newPassword: str = Field(..., min_length=8, max_length=100)

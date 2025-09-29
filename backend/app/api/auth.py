@@ -23,6 +23,7 @@ from app.schemas.auth import (
     UserResponse,
     ForgotPasswordRequest,
     ResetPasswordRequest,
+    ChangePasswordRequest,
 )
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -171,3 +172,31 @@ async def reset_password(request: Request, reset_request: ResetPasswordRequest) 
         raise InvalidResetTokenError()
 
     return MessageResponse(message="Password has been successfully reset")
+
+
+@router.post("/change-password", response_model=MessageResponse)
+@limiter.limit(settings.auth_password_change_rate_limit)
+async def change_password(
+    request: Request,
+    change_request: ChangePasswordRequest,
+    current_user: User = Depends(get_current_active_user)
+) -> MessageResponse:
+    """Change password for authenticated user."""
+    # Attempt to change password
+    success = user_store.change_password(
+        user_id=current_user.id,
+        current_password=change_request.currentPassword,
+        new_password=change_request.newPassword
+    )
+
+    if not success:
+        raise InvalidCredentialsError("Current password is incorrect")
+
+    # TODO: Invalidate all user tokens after password change
+    # This requires implementing a token blacklist system:
+    # 1. Create a token blacklist store (Redis or database)
+    # 2. Add all current user tokens to blacklist
+    # 3. Update get_current_user dependency to check blacklist
+    # For now, users should log out and log back in after password change
+
+    return MessageResponse(message="Password has been successfully changed")

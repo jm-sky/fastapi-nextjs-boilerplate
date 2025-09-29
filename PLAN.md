@@ -196,16 +196,21 @@
 - 🛡️ **Memory Safety**: No plain text token storage, JWT handles expiry
 - 🛡️ **Production Logging**: Proper logging instead of print statements
 
-### 15. Password change functionality (authenticated users)
-**Status**: PENDING
+### 15. ✅ Password change functionality (authenticated users)
+**Status**: COMPLETED
 **Cel**: Allow authenticated users to change their password
-**TODO**:
-- ⏳ Create change password backend endpoint (/auth/change-password)
-- ⏳ Create /change-password page (protected route)
-- ⏳ Add form with current password + new password fields
-- ⏳ Add proper validation (current password verification)
-- ⏳ Add link to change password from dashboard/settings
-- ⏳ Invalidate all user tokens after password change
+**Wynik**:
+- ✅ Backend endpoint: `/auth/change-password` with authentication required
+- ✅ Protected route: `/change-password` page with ProtectedRoute wrapper
+- ✅ Form with current password + new password + confirm password fields
+- ✅ Current password verification before allowing change
+- ✅ Password strength validation (8+ characters, confirmation match)
+- ✅ Dashboard integration: "Change Password" link in Settings card
+- ✅ Security messaging: Users advised to log out/in after password change
+- ✅ Comprehensive E2E tests with Playwright (auth-change-password.spec.ts)
+- ✅ Password visibility toggles for all password fields
+- ✅ Form validation with React Hook Form + Zod
+- 📝 Token invalidation: Documented TODO for future blacklist implementation
 
 ### 16. Password strength validation
 **Status**: PENDING

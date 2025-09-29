@@ -153,6 +153,21 @@ class UserStore:
                 return True
         return False
 
+    def change_password(self, user_id: str, current_password: str, new_password: str) -> bool:
+        """Change user password after verifying current password."""
+        user = self.get_user_by_id(user_id)
+        if not user or not user.isActive:
+            return False
+
+        # Verify current password
+        if not verify_password(current_password, user.hashedPassword):
+            return False
+
+        # Update password
+        user.hashedPassword = get_password_hash(new_password)
+        self.update_user(user)
+        return True
+
 
 # Global user store instance
 user_store = UserStore()
