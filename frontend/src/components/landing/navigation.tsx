@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/context/auth.context';
 import Link from 'next/link';
+import LogoText from "../layout/logoText";
 
 export function Navigation() {
   const { isAuthenticated, isLoading, logout } = useAuth();
@@ -18,10 +19,9 @@ export function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-sky-500 to-blue-600 rounded-lg"></div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-700 bg-clip-text text-transparent">
-                SaaS Boilerplate
-              </h1>
+              <Link href="/" className="hover:scale-105 transition-all duration-200">
+                <LogoText className="text-xl font-bold" />
+              </Link>
             </div>
           </div>
 
