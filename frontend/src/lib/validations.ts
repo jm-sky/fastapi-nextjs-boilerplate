@@ -14,6 +14,15 @@ export const LoginSchema = z.object({
     .min(8, 'Password must be at least 8 characters'),
 });
 
+// Password validation schema - reusable for all password fields
+export const PasswordSchema = z
+  .string()
+  .min(1, 'Password is required')
+  .min(8, 'Password must be at least 8 characters')
+  .max(100, 'Password must be less than 100 characters')
+  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
+    'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character (!@#$%^&*(),.?":{}|<>)');
+
 export const RegisterSchema = z.object({
   name: z
     .string()
@@ -24,12 +33,7 @@ export const RegisterSchema = z.object({
     .string()
     .min(1, 'Email is required')
     .email('Please enter a valid email address'),
-  password: z
-    .string()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 
-      'Password must contain at least one lowercase letter, one uppercase letter, and one number'),
+  password: PasswordSchema,
 });
 
 export const TokenRefreshSchema = z.object({

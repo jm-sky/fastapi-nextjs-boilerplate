@@ -43,7 +43,7 @@ test.describe('Register Page', () => {
     // Fill invalid email
     await page.getByLabel(/name/i).fill('Test User');
     await page.getByLabel(/email/i).fill('invalid-email');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /create account/i }).click();
 
     // Check for email validation error
@@ -69,7 +69,7 @@ test.describe('Register Page', () => {
     // Fill valid fields but short name
     await page.getByLabel(/name/i).fill('A');
     await page.getByLabel(/email/i).fill('test@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /create account/i }).click();
 
     // Check for name validation error
@@ -95,7 +95,7 @@ test.describe('Register Flow', () => {
     // Fill form with existing email
     await page.getByLabel(/name/i).fill('Test User');
     await page.getByLabel(/email/i).fill('existing@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
 
     // Submit form
     await page.getByRole('button', { name: /create account/i }).click();
@@ -117,7 +117,7 @@ test.describe('Register Flow', () => {
     // Fill form with valid credentials
     await page.getByLabel(/name/i).fill('Test User');
     await page.getByLabel(/email/i).fill('test@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
 
     // Submit form
     await page.getByRole('button', { name: /create account/i }).click();
@@ -140,7 +140,7 @@ test.describe('Register Flow', () => {
     // Fill form
     await page.getByLabel(/name/i).fill('Test User');
     await page.getByLabel(/email/i).fill('test@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
 
     // Submit form
     await page.getByRole('button', { name: /create account/i }).click();
@@ -208,7 +208,7 @@ test.describe('Register Success Flow (Mock)', () => {
     // Fill and submit form
     await page.getByLabel(/name/i).fill('New User');
     await page.getByLabel(/email/i).fill('newuser@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /create account/i }).click();
 
     // Should redirect to dashboard
@@ -241,7 +241,7 @@ test.describe('Register Success Flow (Mock)', () => {
     // Fill and submit form
     await page.getByLabel(/name/i).fill('New User');
     await page.getByLabel(/email/i).fill('newuser@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /create account/i }).click();
 
     // Should redirect to login page with success message

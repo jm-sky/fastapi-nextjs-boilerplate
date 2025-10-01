@@ -55,7 +55,7 @@ test.describe('Change Password Page', () => {
     await page.goto('/change-password')
 
     // Fill short new password
-    await page.getByLabel(/current password/i).fill('currentpass123')
+    await page.getByLabel(/current password/i).fill('CurrentPass123!')
     await page.getByLabel(/^new password$/i).fill('123')
     await page.getByLabel(/^new password$/i).blur()
     await page.getByRole('button', { name: /^change password$/i }).click()
@@ -68,9 +68,9 @@ test.describe('Change Password Page', () => {
     await page.goto('/change-password')
 
     // Fill mismatched passwords
-    await page.getByLabel(/current password/i).fill('currentpass123')
-    await page.getByLabel(/^new password$/i).fill('newpassword123')
-    await page.getByLabel(/confirm new password/i).fill('differentpass123')
+    await page.getByLabel(/current password/i).fill('CurrentPass123!')
+    await page.getByLabel(/^new password$/i).fill('NewPassword123!')
+    await page.getByLabel(/confirm new password/i).fill('DifferentPass123!')
     await page.getByLabel(/confirm new password/i).blur()
     await page.getByRole('button', { name: /^change password$/i }).click()
 
@@ -150,9 +150,9 @@ test.describe('Change Password Flow', () => {
     await page.goto('/change-password')
 
     // Fill and submit form
-    await page.getByLabel(/current password/i).fill('currentpass123')
-    await page.getByLabel(/^new password$/i).fill('newpassword123')
-    await page.getByLabel(/confirm new password/i).fill('newpassword123')
+    await page.getByLabel(/current password/i).fill('CurrentPass123!')
+    await page.getByLabel(/^new password$/i).fill('NewPassword123!')
+    await page.getByLabel(/confirm new password/i).fill('NewPassword123!')
     await page.getByRole('button', { name: /^change password$/i }).click()
 
     // Should show success message
@@ -180,8 +180,8 @@ test.describe('Change Password Flow', () => {
 
     // Fill and submit form
     await page.getByLabel(/current password/i).fill('wrongpassword')
-    await page.getByLabel(/^new password$/i).fill('newpassword123')
-    await page.getByLabel(/confirm new password/i).fill('newpassword123')
+    await page.getByLabel(/^new password$/i).fill('NewPassword123!')
+    await page.getByLabel(/confirm new password/i).fill('NewPassword123!')
     await page.getByRole('button', { name: /^change password$/i }).click()
 
     // Should show error message
@@ -197,9 +197,9 @@ test.describe('Change Password Flow', () => {
     await page.goto('/change-password')
 
     // Fill and submit form
-    await page.getByLabel(/current password/i).fill('currentpass123')
-    await page.getByLabel(/^new password$/i).fill('newpassword123')
-    await page.getByLabel(/confirm new password/i).fill('newpassword123')
+    await page.getByLabel(/current password/i).fill('CurrentPass123!')
+    await page.getByLabel(/^new password$/i).fill('NewPassword123!')
+    await page.getByLabel(/confirm new password/i).fill('NewPassword123!')
     await page.getByRole('button', { name: /^change password$/i }).click()
 
     // Should show error message
@@ -227,9 +227,9 @@ test.describe('Change Password Flow', () => {
     await page.goto('/change-password')
 
     // Fill form
-    await page.getByLabel(/current password/i).fill('currentpass123')
-    await page.getByLabel(/^new password$/i).fill('newpassword123')
-    await page.getByLabel(/confirm new password/i).fill('newpassword123')
+    await page.getByLabel(/current password/i).fill('CurrentPass123!')
+    await page.getByLabel(/^new password$/i).fill('NewPassword123!')
+    await page.getByLabel(/confirm new password/i).fill('NewPassword123!')
 
     // Submit form
     await page.getByRole('button', { name: /^change password$/i }).click()
@@ -258,9 +258,9 @@ test.describe('Change Password Flow', () => {
     await page.goto('/change-password')
 
     // Fill and submit form
-    await page.getByLabel(/current password/i).fill('currentpass123')
-    await page.getByLabel(/^new password$/i).fill('newpassword123')
-    await page.getByLabel(/confirm new password/i).fill('newpassword123')
+    await page.getByLabel(/current password/i).fill('CurrentPass123!')
+    await page.getByLabel(/^new password$/i).fill('NewPassword123!')
+    await page.getByLabel(/confirm new password/i).fill('NewPassword123!')
     await page.getByRole('button', { name: /^change password$/i }).click()
 
     // Wait for success message

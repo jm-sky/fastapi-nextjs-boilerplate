@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import apiClient from '@/lib/api.client'
+import { AxiosError } from 'axios'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -43,7 +44,7 @@ export function ForgotPasswordForm() {
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (data: ForgotPasswordFormData): Promise<ForgotPasswordResponse> => {
-      const response = await axios.post('/api/auth/forgot-password', data)
+      const response = await apiClient.post('/auth/forgot-password', data)
       return response.data
     },
     onSuccess: () => {
@@ -108,7 +109,7 @@ export function ForgotPasswordForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {forgotPasswordMutation.error && (
             <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
-              {axios.isAxiosError(forgotPasswordMutation.error)
+              {forgotPasswordMutation.error instanceof AxiosError
                 ? forgotPasswordMutation.error.response?.data?.detail || 'An unexpected error occurred'
                 : 'An unexpected error occurred'}
             </div>

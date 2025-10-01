@@ -212,12 +212,17 @@
 - ✅ Form validation with React Hook Form + Zod
 - 📝 Token invalidation: Documented TODO for future blacklist implementation
 
-### 16. Password strength validation
-**Status**: PENDING
+### 16. ✅ Password strength validation
+**Status**: COMPLETED
 **Cel**: Implement strong password requirements
-**TODO**:
-- ✅ Minimum 8 characters (already implemented)
-- ⏳ Require uppercase, lowercase, digit, special character
+**Wynik**:
+- ✅ Minimum 8 characters
+- ✅ Require uppercase, lowercase, digit, special character
+- ✅ Backend validation with Pydantic field validators
+- ✅ Frontend validation with Zod regex patterns
+- ✅ Applied to all password fields (register, reset, change)
+- ✅ Updated all E2E tests (80 tests passing)
+- ✅ Consistent error messages across backend/frontend
 - ⏳ ~~Password strength meter in frontend~~ `LATER`
 - ⏳ ~~Common password dictionary check~~ `LATER`
 - ⏳ ~~Password history to prevent reuse~~ `LATER`

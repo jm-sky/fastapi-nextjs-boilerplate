@@ -121,7 +121,7 @@ export function RegisterForm() {
               <p className="text-sm text-red-600">{errors.password.message}</p>
             )}
             <p className="text-xs text-gray-500">
-              Password must contain at least 8 characters with uppercase, lowercase, and number
+              Password must contain at least 8 characters with uppercase, lowercase, digit, and special character
             </p>
           </div>
 

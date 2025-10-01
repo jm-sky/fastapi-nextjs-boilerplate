@@ -41,7 +41,7 @@ test.describe('Login Page', () => {
     // Fill invalid email and blur to trigger validation
     await page.getByLabel(/email/i).fill('invalid-email');
     await page.getByLabel(/email/i).blur();
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /sign in/i }).click();
 
     // Check for email validation error (exact message from Zod schema)
@@ -88,7 +88,7 @@ test.describe('Login Flow', () => {
 
     // Fill form with valid format credentials
     await page.getByLabel(/email/i).fill('test@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
 
     // Submit form
     await page.getByRole('button', { name: /sign in/i }).click();
@@ -113,7 +113,7 @@ test.describe('Login Flow', () => {
 
     // Fill form
     await page.getByLabel(/email/i).fill('test@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
 
     // Submit form
     await page.getByRole('button', { name: /sign in/i }).click();
@@ -179,7 +179,7 @@ test.describe('Login Success Flow (Mock)', () => {
 
     // Fill and submit form
     await page.getByLabel(/email/i).fill('test@example.com');
-    await page.getByLabel(/password/i).fill('password123');
+    await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /sign in/i }).click();
 
     // Should redirect to dashboard

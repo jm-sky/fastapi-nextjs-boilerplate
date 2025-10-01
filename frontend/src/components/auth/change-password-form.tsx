@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import apiClient from '@/lib/api.client'
+import { AxiosError } from 'axios'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,8 +23,11 @@ const changePasswordSchema = z
       .min(1, 'Current password is required'),
     newPassword: z
       .string()
+      .min(1, 'Password is required')
       .min(8, 'Password must be at least 8 characters')
-      .max(100, 'Password must be less than 100 characters'),
+      .max(100, 'Password must be less than 100 characters')
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
+        'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character (!@#$%^&*(),.?":{}|<>)'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -64,7 +68,7 @@ export function ChangePasswordForm() {
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       }
-      const response = await axios.post('/api/auth/change-password', requestData)
+      const response = await apiClient.post('/auth/change-password', requestData)
       return response.data
     },
     onSuccess: () => {
@@ -123,7 +127,7 @@ export function ChangePasswordForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {changePasswordMutation.error && (
             <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
-              {axios.isAxiosError(changePasswordMutation.error)
+              {changePasswordMutation.error instanceof AxiosError
                 ? changePasswordMutation.error.response?.data?.detail || 'An unexpected error occurred'
                 : 'An unexpected error occurred'}
             </div>
