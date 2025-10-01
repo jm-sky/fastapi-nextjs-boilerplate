@@ -227,16 +227,19 @@
 - ⏳ ~~Common password dictionary check~~ `LATER`
 - ⏳ ~~Password history to prevent reuse~~ `LATER`
 
-### 17. Token blacklisting for proper logout
-**Status**: PENDING  
+### 17. ✅ Token blacklisting for proper logout
+**Status**: COMPLETED
 **Cel**: Implement secure token invalidation
-**TODO**:
-- ⏳ In-memory token blacklist for development
-- ⏳ Redis-based blacklist for production
-- ⏳ Cleanup expired tokens from blacklist
-- ⏳ Check blacklist in token verification
-- ⏳ Add token to blacklist on logout
-- ⏳ Add all user tokens to blacklist on password change
+**Wynik**:
+- ✅ In-memory token blacklist with thread-safe operations
+- ✅ Token storage with expiration timestamps
+- ✅ Automatic cleanup of expired tokens (hourly background task)
+- ✅ Blacklist check in JWT verification (verify_token)
+- ✅ Logout endpoint adds token to blacklist
+- ✅ Background daemon thread for periodic cleanup
+- ✅ Proper error handling for revoked tokens
+- 📝 Future: Redis-based blacklist for production/distributed systems
+- 📝 Future: Blacklist all user tokens on password change
 
 ### 18. Google reCAPTCHA integration
 **Status**: PENDING

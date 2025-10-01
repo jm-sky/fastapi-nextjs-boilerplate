@@ -18,6 +18,21 @@ def create_app(settings: Settings) -> FastAPI:
         debug=settings.debug,
     )
 
+    # Start background task for token blacklist cleanup
+    @app.on_event("startup")
+    async def startup_event():
+        """Start background tasks on application startup."""
+        import threading
+        from app.core.token_blacklist import cleanup_blacklist_periodically
+
+        # Run cleanup in background thread
+        cleanup_thread = threading.Thread(
+            target=cleanup_blacklist_periodically,
+            daemon=True,
+            name="blacklist-cleanup"
+        )
+        cleanup_thread.start()
+
     # Configure CORS
     app.add_middleware(
         CORSMiddleware,

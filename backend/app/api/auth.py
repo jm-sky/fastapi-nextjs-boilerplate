@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.core.auth import create_access_token, create_refresh_token, verify_token
 from app.core.dependencies import get_current_active_user
-from app.core.rate_limit import limiter
-from app.core.settings import settings
 from app.core.exceptions import (
     InvalidCredentialsError,
     InvalidTokenError,
@@ -12,6 +11,8 @@ from app.core.exceptions import (
     InactiveUserError,
     InvalidResetTokenError,
 )
+from app.core.rate_limit import limiter
+from app.core.settings import settings
 from app.models.user import User, user_store
 from app.schemas.auth import (
     LoginResponse,
@@ -27,6 +28,9 @@ from app.schemas.auth import (
 )
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
+
+# Security scheme for extracting Bearer token
+security = HTTPBearer()
 
 
 @router.post("/register", response_model=LoginResponse, status_code=status.HTTP_201_CREATED)
@@ -121,10 +125,16 @@ async def refresh_token(request: Request, token_data: TokenRefresh) -> TokenResp
 
 
 @router.post("/logout", response_model=MessageResponse)
-async def logout(current_user: User = Depends(get_current_active_user)) -> MessageResponse:
-    """Logout user (token invalidation would be handled by client or token blacklist)."""
-    # In a real implementation, you might want to add the token to a blacklist
-    # For now, we just return a success message
+async def logout(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    current_user: User = Depends(get_current_active_user)
+) -> MessageResponse:
+    """Logout user and blacklist their access token."""
+    from app.core.token_blacklist import token_blacklist
+
+    # Add the access token to blacklist
+    token_blacklist.add(credentials.credentials)
+
     return MessageResponse(message="Successfully logged out")
 
 

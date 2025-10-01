@@ -5,6 +5,7 @@ import jwt
 from passlib.context import CryptContext
 
 from app.core.settings import settings
+from app.core.token_blacklist import token_blacklist
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -40,6 +41,11 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
 
 def verify_token(token: str) -> Dict[str, Any]:
     """Verify and decode a JWT token."""
+    # Check if token is blacklisted first
+    if token_blacklist.is_blacklisted(token):
+        from app.core.exceptions import InvalidTokenError
+        raise InvalidTokenError("Token has been revoked")
+
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
         return payload
