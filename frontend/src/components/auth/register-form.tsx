@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +20,7 @@ import Link from 'next/link';
 export function RegisterForm() {
   const router = useRouter();
   const { register: registerUser, isLoading } = useAuth();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -36,7 +38,16 @@ export function RegisterForm() {
     setSuccess(null);
 
     try {
-      await registerUser(data);
+      // Execute reCAPTCHA verification
+      let recaptchaToken: string | undefined;
+      if (executeRecaptcha) {
+        recaptchaToken = await executeRecaptcha('register');
+      }
+
+      await registerUser({
+        ...data,
+        recaptchaToken,
+      });
 
       // Check if registration auto-logs the user in or not
       // If it auto-logs in, redirect to dashboard

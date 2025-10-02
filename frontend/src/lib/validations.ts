@@ -12,6 +12,7 @@ export const LoginSchema = z.object({
     .string()
     .min(1, 'Password is required')
     .min(8, 'Password must be at least 8 characters'),
+  recaptchaToken: z.string().optional(),
 });
 
 // Password validation schema - reusable for all password fields
@@ -34,6 +35,7 @@ export const RegisterSchema = z.object({
     .min(1, 'Email is required')
     .email('Please enter a valid email address'),
   password: PasswordSchema,
+  recaptchaToken: z.string().optional(),
 });
 
 export const TokenRefreshSchema = z.object({

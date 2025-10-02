@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +20,7 @@ import Link from 'next/link';
 export function LoginForm() {
   const router = useRouter();
   const { login, isLoading } = useAuth();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -34,7 +36,16 @@ export function LoginForm() {
     setError(null);
 
     try {
-      await login(data);
+      // Execute reCAPTCHA verification
+      let recaptchaToken: string | undefined;
+      if (executeRecaptcha) {
+        recaptchaToken = await executeRecaptcha('login');
+      }
+
+      await login({
+        ...data,
+        recaptchaToken,
+      });
       router.push(AUTH_CONFIG.loginRedirect); // Configurable redirect after successful login
     } catch (error: unknown) {
       // Use type-safe error handling

@@ -50,6 +50,28 @@ class Settings(BaseSettings):
         description="Frontend application URL for reset links and redirects"
     )
 
+    # Google reCAPTCHA Configuration
+    recaptcha_enabled: bool = Field(
+        default=False,
+        description="Enable reCAPTCHA verification (set to False for development/testing)"
+    )
+    recaptcha_secret_key: str = Field(
+        default="",
+        description="Google reCAPTCHA v3 secret key"
+    )
+    recaptcha_site_key: str = Field(
+        default="",
+        description="Google reCAPTCHA v3 site key (for frontend)"
+    )
+    recaptcha_min_score: float = Field(
+        default=0.5,
+        description="Minimum reCAPTCHA score to accept (0.0-1.0)"
+    )
+    recaptcha_verify_url: str = Field(
+        default="https://www.google.com/recaptcha/api/siteverify",
+        description="reCAPTCHA verification endpoint"
+    )
+
     @field_validator('secret_key')
     def validate_secret_key(cls, v: str) -> str:
         """Validate secret key strength and security."""

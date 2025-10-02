@@ -241,8 +241,22 @@
 - 📝 Future: Redis-based blacklist for production/distributed systems
 - 📝 Future: Blacklist all user tokens on password change
 
-### 18. Google reCAPTCHA integration
-**Status**: PENDING
+### 18. ✅ Google reCAPTCHA v3 integration
+**Status**: COMPLETED
+**Cel**: Protect authentication endpoints from bot abuse
+**Wynik**:
+- ✅ Backend: reCAPTCHA verification service with Google API integration
+- ✅ Backend: Optional reCAPTCHA (enabled/disabled via RECAPTCHA_ENABLED flag)
+- ✅ Backend: Configurable score threshold (default 0.5)
+- ✅ Backend: Integration in login, register, forgot-password endpoints
+- ✅ Backend: Action validation to prevent token reuse
+- ✅ Frontend: react-google-recaptcha-v3 (1.11.0, actively maintained, 463 stars)
+- ✅ Frontend: RecaptchaProvider wraps app when site key configured
+- ✅ Frontend: Graceful degradation when reCAPTCHA not configured
+- ✅ Frontend: Token generation in login, register, forgot-password forms
+- ✅ Tests: No changes needed (reCAPTCHA disabled by default)
+- 📝 Setup required: Get site key from https://www.google.com/recaptcha/admin/create
+- 📝 Environment: NEXT_PUBLIC_RECAPTCHA_SITE_KEY and RECAPTCHA_SECRET_KEY
 
 ### 19. OAuth Google authentication
 **Status**: PENDING

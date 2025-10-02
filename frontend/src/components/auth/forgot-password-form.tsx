@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
 import { useMutation } from '@tanstack/react-query'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import apiClient from '@/lib/api.client'
 import { AxiosError } from 'axios'
 
@@ -31,6 +32,7 @@ interface ForgotPasswordResponse {
 
 export function ForgotPasswordForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const { executeRecaptcha } = useGoogleReCaptcha()
 
   const {
     register,
@@ -43,7 +45,7 @@ export function ForgotPasswordForm() {
   })
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: async (data: ForgotPasswordFormData): Promise<ForgotPasswordResponse> => {
+    mutationFn: async (data: ForgotPasswordFormData & { recaptchaToken?: string }): Promise<ForgotPasswordResponse> => {
       const response = await apiClient.post('/auth/forgot-password', data)
       return response.data
     },
@@ -52,8 +54,17 @@ export function ForgotPasswordForm() {
     },
   })
 
-  const onSubmit = (data: ForgotPasswordFormData) => {
-    forgotPasswordMutation.mutate(data)
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    // Execute reCAPTCHA verification
+    let recaptchaToken: string | undefined
+    if (executeRecaptcha) {
+      recaptchaToken = await executeRecaptcha('forgot_password')
+    }
+
+    forgotPasswordMutation.mutate({
+      ...data,
+      recaptchaToken,
+    })
   }
 
   if (isSubmitted) {

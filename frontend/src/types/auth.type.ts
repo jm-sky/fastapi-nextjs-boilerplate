@@ -11,12 +11,14 @@ export interface User {
 export interface LoginRequest {
   email: string;
   password: string;
+  recaptchaToken?: string;
 }
 
 export interface RegisterRequest {
   email: string;
   password: string;
   name: string;
+  recaptchaToken?: string;
 }
 
 export interface LoginResponse {

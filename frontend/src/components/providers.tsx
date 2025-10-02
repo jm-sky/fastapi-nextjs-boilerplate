@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AuthProvider } from '@/context/auth.context'
 import { setNavigateFunction } from '@/lib/navigation'
 import { AuthErrorBoundary } from '@/components/error-boundary'
+import { RecaptchaProvider } from '@/components/providers/recaptcha-provider'
 
 function NavigationProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -30,11 +31,13 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationProvider>
-        <AuthErrorBoundary>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </AuthErrorBoundary>
+        <RecaptchaProvider>
+          <AuthErrorBoundary>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </AuthErrorBoundary>
+        </RecaptchaProvider>
       </NavigationProvider>
     </QueryClientProvider>
   )

@@ -37,6 +37,10 @@ security = HTTPBearer()
 @limiter.limit(settings.auth_register_rate_limit)
 async def register(request: Request, user_data: UserRegister) -> LoginResponse:
     """Register a new user."""
+    # Verify reCAPTCHA
+    from app.core.recaptcha import verify_recaptcha
+    await verify_recaptcha(user_data.recaptchaToken or "", action="register")
+
     # Create user (let UserAlreadyExistsError bubble up to global handler)
     user = user_store.create_user(
         email=user_data.email,
@@ -60,6 +64,10 @@ async def register(request: Request, user_data: UserRegister) -> LoginResponse:
 @limiter.limit(settings.auth_login_rate_limit)
 async def login(request: Request, user_credentials: UserLogin) -> LoginResponse:
     """Authenticate user and return tokens."""
+    # Verify reCAPTCHA
+    from app.core.recaptcha import verify_recaptcha
+    await verify_recaptcha(user_credentials.recaptchaToken or "", action="login")
+
     # Get user by email
     user = user_store.get_user_by_email(user_credentials.email)
     if not user:
@@ -150,6 +158,10 @@ async def get_current_user_info(
 @limiter.limit(settings.auth_register_rate_limit)  # Reuse register rate limit for security
 async def forgot_password(request: Request, forgot_request: ForgotPasswordRequest) -> MessageResponse:
     """Request password reset token."""
+    # Verify reCAPTCHA
+    from app.core.recaptcha import verify_recaptcha
+    await verify_recaptcha(forgot_request.recaptchaToken or "", action="forgot_password")
+
     # Generate reset token (always return success for security - don't reveal if email exists)
     token = user_store.generate_reset_token(forgot_request.email)
 
