@@ -258,8 +258,25 @@
 - 📝 Setup required: Get site key from https://www.google.com/recaptcha/admin/create
 - 📝 Environment: NEXT_PUBLIC_RECAPTCHA_SITE_KEY and RECAPTCHA_SECRET_KEY
 
-### 19. OAuth Google authentication
-**Status**: PENDING
+### 19. ✅ OAuth Google authentication
+**Status**: COMPLETED
+**Cel**: Add Google OAuth login/register flow
+**Wynik**:
+- ✅ Backend: Authlib 1.6.4 for OAuth client
+- ✅ Backend: Session middleware for OAuth state management
+- ✅ Backend: Google OAuth configuration in settings (client ID, secret, redirect URI)
+- ✅ Backend: `/auth/google/login` initiates OAuth flow
+- ✅ Backend: `/auth/google/callback` handles OAuth callback
+- ✅ Backend: Automatic user creation/login from Google profile
+- ✅ Backend: Returns standard JWT tokens (same as normal login)
+- ✅ Frontend: "Sign in with Google" button on login/register pages
+- ✅ Frontend: OAuth callback page at `/auth/google/callback`
+- ✅ Frontend: Token storage and automatic redirect to dashboard
+- ✅ Integration: OAuth users created with random password (don't need it)
+- ✅ Type safety: mypy type ignores for authlib (no stubs available)
+- 📝 Setup required: Get OAuth credentials from https://console.cloud.google.com/apis/credentials
+- 📝 Environment: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI
+- 📝 Future: Store OAuth provider info to prevent password login for OAuth users
 
 ### 20. CI workflow
 **Status**: PENDING

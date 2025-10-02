@@ -15,6 +15,7 @@ import { useAuth } from '@/context/auth.context';
 import { getErrorMessage } from '@/lib/error.guards';
 import { RegisterSchema, type RegisterFormData } from '@/lib/validations';
 import { AUTH_CONFIG } from '@/lib/auth.config';
+import { GoogleLoginButton } from '@/components/auth/google-login-button';
 import Link from 'next/link';
 
 export function RegisterForm() {
@@ -139,6 +140,17 @@ export function RegisterForm() {
           <Button type="submit" className="w-full" disabled={isFormLoading}>
             {isLoading ? 'Creating account...' : isSubmitting ? 'Creating account...' : 'Create Account'}
           </Button>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <GoogleLoginButton disabled={isFormLoading} variant="signup" />
 
           <div className="text-center text-sm text-gray-600">
             Already have an account?{' '}

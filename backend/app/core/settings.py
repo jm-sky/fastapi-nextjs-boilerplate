@@ -72,6 +72,20 @@ class Settings(BaseSettings):
         description="reCAPTCHA verification endpoint"
     )
 
+    # Google OAuth Configuration
+    google_client_id: str = Field(
+        default="",
+        description="Google OAuth client ID"
+    )
+    google_client_secret: str = Field(
+        default="",
+        description="Google OAuth client secret"
+    )
+    google_redirect_uri: str = Field(
+        default="http://localhost:3000/auth/google/callback",
+        description="Google OAuth redirect URI (must match Google Console configuration)"
+    )
+
     @field_validator('secret_key')
     def validate_secret_key(cls, v: str) -> str:
         """Validate secret key strength and security."""

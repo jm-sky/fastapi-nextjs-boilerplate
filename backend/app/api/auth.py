@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from authlib.integrations.starlette_client import OAuthError  # type: ignore[import-untyped]
 
 from app.core.auth import create_access_token, create_refresh_token, verify_token
 from app.core.dependencies import get_current_active_user
@@ -13,6 +14,7 @@ from app.core.exceptions import (
 )
 from app.core.rate_limit import limiter
 from app.core.settings import settings
+from app.core.oauth import oauth
 from app.models.user import User, user_store
 from app.schemas.auth import (
     LoginResponse,
@@ -222,3 +224,68 @@ async def change_password(
     # For now, users should log out and log back in after password change
 
     return MessageResponse(message="Password has been successfully changed")
+
+
+# OAuth Google Authentication
+
+
+@router.get("/google/login")
+async def google_login(request: Request):
+    """Initiate Google OAuth login flow."""
+    # Build redirect URI dynamically from request
+    redirect_uri = str(request.url_for('google_callback'))
+    return await oauth.google.authorize_redirect(request, redirect_uri)
+
+
+@router.get("/google/callback")
+async def google_callback(request: Request) -> LoginResponse:
+    """Handle Google OAuth callback and authenticate user."""
+    try:
+        # Exchange authorization code for access token
+        token = await oauth.google.authorize_access_token(request)
+    except OAuthError as error:
+        # OAuth failed - redirect to login with error
+        raise InvalidCredentialsError(f"Google authentication failed: {error.error}")
+
+    # Extract user info from token
+    user_info = token.get('userinfo')
+    if not user_info:
+        raise InvalidCredentialsError("Failed to get user information from Google")
+
+    email = user_info.get('email')
+    name = user_info.get('name', '')
+    google_id = user_info.get('sub')  # Google user ID
+
+    if not email or not google_id:
+        raise InvalidCredentialsError("Incomplete user information from Google")
+
+    # Check if user exists
+    user = user_store.get_user_by_email(email)
+
+    if not user:
+        # Create new user with Google OAuth
+        # Generate a random password since OAuth users don't need it
+        import secrets
+        random_password = secrets.token_urlsafe(32)
+
+        user = user_store.create_user(
+            email=email,
+            password=random_password,  # User won't use this, they'll use OAuth
+            full_name=name
+        )
+
+    # Check if user is active
+    if not user.isActive:
+        raise InactiveUserError()
+
+    # Generate JWT tokens
+    access_token = create_access_token({"sub": user.id, "type": "access"})
+    refresh_token = create_refresh_token({"sub": user.id, "type": "refresh"})
+
+    return LoginResponse(
+        user=UserResponse(**user.to_response()),
+        accessToken=access_token,
+        refreshToken=refresh_token,
+        tokenType="Bearer",
+        expiresIn=settings.access_token_expires_minutes * 60
+    )

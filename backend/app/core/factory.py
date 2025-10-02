@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
@@ -32,6 +33,14 @@ def create_app(settings: Settings) -> FastAPI:
             name="blacklist-cleanup"
         )
         cleanup_thread.start()
+
+    # Configure Session Middleware (required for OAuth)
+    app.add_middleware(
+        SessionMiddleware,
+        secret_key=settings.secret_key,
+        max_age=600,  # 10 minutes for OAuth flow
+        https_only=settings.environment == "production",
+    )
 
     # Configure CORS
     app.add_middleware(
