@@ -34,7 +34,7 @@ async def verify_recaptcha(token: str, action: str = "submit") -> Dict[str, Any]
         RecaptchaError: If verification fails or score is too low
     """
     # Skip verification if reCAPTCHA is disabled (for development/testing)
-    if not settings.recaptcha_enabled:
+    if not settings.recaptcha.enabled:
         logger.debug("reCAPTCHA verification skipped (disabled in settings)")
         return {
             "success": True,
@@ -49,9 +49,9 @@ async def verify_recaptcha(token: str, action: str = "submit") -> Dict[str, Any]
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                settings.recaptcha_verify_url,
+                settings.recaptcha.verify_url,
                 data={
-                    "secret": settings.recaptcha_secret_key,
+                    "secret": settings.recaptcha.secret_key,
                     "response": token,
                 },
                 timeout=10.0
@@ -81,9 +81,9 @@ async def verify_recaptcha(token: str, action: str = "submit") -> Dict[str, Any]
 
         # Check score threshold
         score = result.get("score", 0.0)
-        if score < settings.recaptcha_min_score:
+        if score < settings.recaptcha.min_score:
             logger.warning(
-                f"reCAPTCHA score too low: {score} < {settings.recaptcha_min_score}"
+                f"reCAPTCHA score too low: {score} < {settings.recaptcha.min_score}"
             )
             raise RecaptchaError(
                 f"reCAPTCHA verification failed: score too low ({score})"

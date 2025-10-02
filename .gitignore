@@ -22,6 +22,8 @@ lerna-debug.log*
 build
 __pycache__
 .venv
+app.db
+app.db-*
 
 # Frontend
 .next

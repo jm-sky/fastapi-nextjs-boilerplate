@@ -36,7 +36,7 @@ security = HTTPBearer()
 
 
 @router.post("/register", response_model=LoginResponse, status_code=status.HTTP_201_CREATED)
-@limiter.limit(settings.auth_register_rate_limit)
+@limiter.limit(settings.rate_limit.auth_register)
 async def register(request: Request, user_data: UserRegister) -> LoginResponse:
     """Register a new user."""
     # Verify reCAPTCHA
@@ -58,12 +58,12 @@ async def register(request: Request, user_data: UserRegister) -> LoginResponse:
         user=UserResponse(**user.to_response()),
         accessToken=access_token,
         refreshToken=refresh_token,
-        expiresIn=settings.access_token_expires_minutes * 60
+        expiresIn=settings.security.access_token_expires_minutes * 60
     )
 
 
 @router.post("/login", response_model=LoginResponse)
-@limiter.limit(settings.auth_login_rate_limit)
+@limiter.limit(settings.rate_limit.auth_login)
 async def login(request: Request, user_credentials: UserLogin) -> LoginResponse:
     """Authenticate user and return tokens."""
     # Verify reCAPTCHA
@@ -91,12 +91,12 @@ async def login(request: Request, user_credentials: UserLogin) -> LoginResponse:
         user=UserResponse(**user.to_response()),
         accessToken=access_token,
         refreshToken=refresh_token,
-        expiresIn=settings.access_token_expires_minutes * 60
+        expiresIn=settings.security.access_token_expires_minutes * 60
     )
 
 
 @router.post("/refresh", response_model=TokenResponse)
-@limiter.limit(settings.auth_refresh_rate_limit)
+@limiter.limit(settings.rate_limit.auth_refresh)
 async def refresh_token(request: Request, token_data: TokenRefresh) -> TokenResponse:
     """Refresh access token using refresh token."""
     # Verify refresh token (let exceptions bubble up)
@@ -130,7 +130,7 @@ async def refresh_token(request: Request, token_data: TokenRefresh) -> TokenResp
     return TokenResponse(
         accessToken=new_access_token,
         refreshToken=new_refresh_token,
-        expiresIn=settings.access_token_expires_minutes * 60
+        expiresIn=settings.security.access_token_expires_minutes * 60
     )
 
 
@@ -157,7 +157,7 @@ async def get_current_user_info(
 
 
 @router.post("/forgot-password", response_model=MessageResponse)
-@limiter.limit(settings.auth_register_rate_limit)  # Reuse register rate limit for security
+@limiter.limit(settings.rate_limit.auth_register)  # Reuse register rate limit for security
 async def forgot_password(request: Request, forgot_request: ForgotPasswordRequest) -> MessageResponse:
     """Request password reset token."""
     # Verify reCAPTCHA
@@ -173,7 +173,7 @@ async def forgot_password(request: Request, forgot_request: ForgotPasswordReques
         # await send_password_reset_email(forgot_request.email, token)
 
         # For development only - log the reset link
-        if settings.environment == "development":
+        if settings.app.environment == "development":
             import logging
             logger = logging.getLogger(__name__)
             reset_link = f"{settings.frontend_url}/reset-password/{token}"
@@ -184,7 +184,7 @@ async def forgot_password(request: Request, forgot_request: ForgotPasswordReques
 
 
 @router.post("/reset-password", response_model=MessageResponse)
-@limiter.limit(settings.auth_register_rate_limit)  # Reuse register rate limit for security
+@limiter.limit(settings.rate_limit.auth_register)  # Reuse register rate limit for security
 async def reset_password(request: Request, reset_request: ResetPasswordRequest) -> MessageResponse:
     """Reset password using token."""
     success = user_store.reset_password_with_token(
@@ -199,7 +199,7 @@ async def reset_password(request: Request, reset_request: ResetPasswordRequest) 
 
 
 @router.post("/change-password", response_model=MessageResponse)
-@limiter.limit(settings.auth_password_change_rate_limit)
+@limiter.limit(settings.rate_limit.auth_password_change)
 async def change_password(
     request: Request,
     change_request: ChangePasswordRequest,
@@ -287,5 +287,5 @@ async def google_callback(request: Request) -> LoginResponse:
         accessToken=access_token,
         refreshToken=refresh_token,
         tokenType="Bearer",
-        expiresIn=settings.access_token_expires_minutes * 60
+        expiresIn=settings.security.access_token_expires_minutes * 60
     )

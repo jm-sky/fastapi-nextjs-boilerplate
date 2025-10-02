@@ -13,10 +13,10 @@ def create_app(settings: Settings) -> FastAPI:
     """Create and configure FastAPI application."""
 
     app = FastAPI(
-        title=settings.app_name,
+        title=settings.app.name,
         description="Modern SaaS application backend with FastAPI",
-        version=settings.app_version,
-        debug=settings.debug,
+        version=settings.app.version,
+        debug=settings.app.debug,
     )
 
     # Start background task for token blacklist cleanup
@@ -37,15 +37,15 @@ def create_app(settings: Settings) -> FastAPI:
     # Configure Session Middleware (required for OAuth)
     app.add_middleware(
         SessionMiddleware,
-        secret_key=settings.secret_key,
+        secret_key=settings.security.secret_key,
         max_age=600,  # 10 minutes for OAuth flow
-        https_only=settings.environment == "production",
+        https_only=settings.app.environment == "production",
     )
 
     # Configure CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins,
+        allow_origins=settings.server.cors_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

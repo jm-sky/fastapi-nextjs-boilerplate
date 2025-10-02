@@ -32,8 +32,8 @@ def get_client_ip(request: Request) -> str:
 limiter = Limiter(
     key_func=get_client_ip,
     default_limits=[
-        f"{settings.rate_limit_default_per_day} per day",
-        f"{settings.rate_limit_default_per_hour} per hour"
+        f"{settings.rate_limit.default_per_day} per day",
+        f"{settings.rate_limit.default_per_hour} per hour"
     ]
 )
 

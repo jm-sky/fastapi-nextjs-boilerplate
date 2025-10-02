@@ -12,8 +12,8 @@ GOOGLE_CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 # Register Google OAuth provider
 oauth.register(
     name='google',
-    client_id=settings.google_client_id,
-    client_secret=settings.google_client_secret,
+    client_id=settings.google_oauth.client_id,
+    client_secret=settings.google_oauth.client_secret,
     server_metadata_url=GOOGLE_CONF_URL,
     client_kwargs={
         'scope': 'openid email profile',

@@ -25,8 +25,8 @@ class TokenBlacklist:
             # Decode token to get expiration time (without verification since it might be expired)
             payload = jwt.decode(
                 token,
-                settings.secret_key,
-                algorithms=[settings.jwt_algorithm],
+                settings.security.secret_key,
+                algorithms=[settings.security.jwt_algorithm],
                 options={"verify_signature": False, "verify_exp": False}
             )
             exp_timestamp = payload.get("exp", 0)
