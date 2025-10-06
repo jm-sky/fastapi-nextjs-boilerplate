@@ -97,7 +97,7 @@ class TestAuthAPI:
 
             response = client.post("/auth/login", json=login_data)
             assert response.status_code == 401
-            assert "Invalid credentials" in response.json()["detail"]
+            assert "Incorrect email or password" in response.json()["detail"]
 
     def test_login_nonexistent_user(self, client):
         """Test login with non-existent user."""
@@ -111,7 +111,7 @@ class TestAuthAPI:
 
             response = client.post("/auth/login", json=login_data)
             assert response.status_code == 401
-            assert "Invalid credentials" in response.json()["detail"]
+            assert "Incorrect email or password" in response.json()["detail"]
 
     def test_get_current_user_success(self, client, test_user_data):
         """Test getting current user with valid token."""
@@ -139,7 +139,7 @@ class TestAuthAPI:
     def test_get_current_user_no_token(self, client):
         """Test getting current user without token."""
         response = client.get("/auth/me")
-        assert response.status_code == 401
+        assert response.status_code == 403  # HTTPBearer returns 403 when credentials are missing
 
     def test_get_current_user_invalid_token(self, client):
         """Test getting current user with invalid token."""
@@ -169,4 +169,4 @@ class TestAuthAPI:
     def test_logout_no_token(self, client):
         """Test logout without token."""
         response = client.post("/auth/logout")
-        assert response.status_code == 401
+        assert response.status_code == 403  # HTTPBearer returns 403 when credentials are missing

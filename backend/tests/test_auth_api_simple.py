@@ -13,9 +13,10 @@ def test_settings_no_limits():
         debug=True,
         secret_key="test-secret-key-for-testing-only-12345678",
         cors_origins=["http://localhost:3000"],
-        auth_register_rate_limit="10000/minute",
-        auth_login_rate_limit="10000/minute",
-        auth_refresh_rate_limit="10000/minute"
+        auth_register_rate_limit="100000/minute",
+        auth_login_rate_limit="100000/minute",
+        auth_refresh_rate_limit="100000/minute",
+        auth_password_change_rate_limit="100000/minute"
     )
 
 
@@ -34,7 +35,7 @@ class TestAuthAPISimple:
         # Use a unique email for this test
         user_data = {
             "email": "unique1@example.com",
-            "password": "testpassword123",
+            "password": "TestPassword123!",
             "name": "Test User 1"
         }
 

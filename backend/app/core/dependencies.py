@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Annotated, Optional
 
 from fastapi import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -51,3 +51,48 @@ async def get_current_active_user(
 ) -> User:
     """Get current active user (alias for clarity)."""
     return current_user
+
+
+# ============================================================================
+# Centralized Dependency Registry
+# ============================================================================
+# Type aliases for cleaner endpoint signatures
+
+CurrentUser = Annotated[User, Depends(get_current_user)]
+"""Type alias for current authenticated user dependency."""
+
+CurrentActiveUser = Annotated[User, Depends(get_current_active_user)]
+"""Type alias for current active user dependency."""
+
+BearerCredentials = Annotated[HTTPAuthorizationCredentials, Depends(security)]
+"""Type alias for HTTP Bearer token credentials."""
+
+
+class Dependencies:
+    """
+    Central dependency registry for common dependencies.
+
+    Provides static methods that return dependency functions for use in endpoints.
+
+    Usage:
+        from app.core.dependencies import CurrentActiveUser
+
+        @router.get("/me")
+        async def get_me(user: CurrentActiveUser) -> UserResponse:
+            return UserResponse(**user.to_response())
+    """
+
+    @staticmethod
+    def current_user() -> User:
+        """Get current authenticated user."""
+        return Depends(get_current_user)
+
+    @staticmethod
+    def active_user() -> User:
+        """Get current active user."""
+        return Depends(get_current_active_user)
+
+    @staticmethod
+    def bearer_credentials() -> HTTPAuthorizationCredentials:
+        """Get Bearer token credentials."""
+        return Depends(security)

@@ -24,7 +24,7 @@ class UserAlreadyExistsError(AuthenticationError):
     """Raised when trying to create a user that already exists."""
 
     def __init__(self, message: str = "User with this email already exists"):
-        super().__init__(message, status.HTTP_400_BAD_REQUEST)
+        super().__init__(message, status.HTTP_409_CONFLICT)
 
 
 class InvalidCredentialsError(AuthenticationError):

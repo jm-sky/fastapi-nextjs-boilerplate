@@ -1,9 +1,18 @@
+import os
 import pytest
 from fastapi.testclient import TestClient
 
 from app.core.factory import create_app
 from app.core.settings import Settings
 from app.models.user import UserStore
+
+# Set environment variables for tests BEFORE importing any app modules
+os.environ["AUTH_REGISTER_RATE_LIMIT"] = "100000/minute"
+os.environ["AUTH_LOGIN_RATE_LIMIT"] = "100000/minute"
+os.environ["AUTH_REFRESH_RATE_LIMIT"] = "100000/minute"
+os.environ["AUTH_PASSWORD_CHANGE_RATE_LIMIT"] = "100000/minute"
+os.environ["RATE_LIMIT_DEFAULT_PER_DAY"] = "100000"
+os.environ["RATE_LIMIT_DEFAULT_PER_HOUR"] = "100000"
 
 
 @pytest.fixture
@@ -14,10 +23,11 @@ def test_settings():
         debug=True,
         secret_key="test-secret-key-for-testing-only-12345678",
         cors_origins=["http://localhost:3000"],
-        # Increase rate limiting for tests
-        auth_register_rate_limit="1000/minute",
-        auth_login_rate_limit="1000/minute",
-        auth_refresh_rate_limit="1000/minute"
+        # Disable rate limiting for tests (very high limits)
+        auth_register_rate_limit="100000/minute",
+        auth_login_rate_limit="100000/minute",
+        auth_refresh_rate_limit="100000/minute",
+        auth_password_change_rate_limit="100000/minute"
     )
 
 
@@ -46,6 +56,6 @@ def test_user_data():
     """Common test user data."""
     return {
         "email": "test@example.com",
-        "password": "testpassword123",
+        "password": "TestPassword123!",  # Meets password requirements: uppercase, lowercase, digit, special char
         "name": "Test User"
     }
