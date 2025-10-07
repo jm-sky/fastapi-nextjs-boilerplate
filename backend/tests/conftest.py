@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from app.core.factory import create_app
 from app.core.settings import Settings
 from app.models.user import UserStore
+from app.core.rate_limit import limiter
 
 # Set environment variables for tests BEFORE importing any app modules
 os.environ["AUTH_REGISTER_RATE_LIMIT"] = "100000/minute"
@@ -49,6 +50,18 @@ def test_app(test_settings):
 def client(test_app):
     """Test client."""
     return TestClient(test_app)
+
+
+@pytest.fixture(autouse=True)
+def reset_rate_limiter():
+    """Reset rate limiter state before each test."""
+    # Clear the rate limiter's storage to prevent test interference
+    if hasattr(limiter, '_storage'):
+        limiter._storage.storage.clear()
+    yield
+    # Clean up after test
+    if hasattr(limiter, '_storage'):
+        limiter._storage.storage.clear()
 
 
 @pytest.fixture

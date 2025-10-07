@@ -6,7 +6,6 @@ from app.core.dependencies import BearerCredentials, CurrentActiveUser
 from app.core.exceptions import InvalidCredentialsError
 from app.core.settings import settings
 from app.core.oauth import oauth
-from app.models.user import User
 from app.schemas.auth import (
     LoginResponse,
     MessageResponse,

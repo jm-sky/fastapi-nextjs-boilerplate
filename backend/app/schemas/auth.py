@@ -58,6 +58,8 @@ class UserResponse(BaseModel):
     isActive: bool
     createdAt: datetime
 
+    model_config = {"from_attributes": True, "populate_by_name": True}
+
 
 class LoginResponse(BaseModel):
     """Login response schema combining token and user info."""
